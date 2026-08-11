@@ -1,0 +1,1 @@
+This is a new project, just started. No code files yet. To learn the goal and plan, read PLAN.md
