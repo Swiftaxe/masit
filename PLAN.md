@@ -64,9 +64,36 @@ Build a small, production-inspired HTTP load balancer in Go.
 - No actual GCP infrastructure deployment unless separately requested.
 - No third-party load balancing libraries — routing/health logic should be hand-written to demonstrate Go concurrency skills.
 
+## Build order
+
+1. Set up project scaffolding and Go module init
+2. Define core interfaces (Backend, RoutingStrategy, BackendConnector,
+BackendProvider, HealthChecker)
+3. Write unit tests for config loading
+4. Implement config loading (YAML + env vars)
+5. Implement StaticBackendProvider (backend registry)
+6. Implement BackendStats + StatsReporter/StatsReader (atomic, sync.Map-backed)
+7. Write integration tests with httptest for reverse proxy behavior
+8. Implement reverse proxy core (forwarding, header preservation, timeouts)
+9. Implement one-shot retry on connection error
+10. Write unit tests for routing algorithms
+11. Implement round-robin routing strategy
+12. Implement least-connections routing strategy
+13. Write unit tests for health check logic
+14. Implement active health checks (/healthz polling)
+15. Implement passive health checks (consecutive-failure circuit breaker)
+16. Implement /metrics endpoint (Prometheus or JSON/text)
+17. Implement structured JSON logging (stdout, per-request latency + 18. backend served)
+18. Implement graceful shutdown
+19. Implement GCPMIGBackendProvider (dynamic GCP discovery)
+20. Implement GCPManagedInstanceConnector
+21. Create Dockerfile for the load balancer
+22. Create docker-compose demo with fake backend services
+23. Write README (quickstart, config reference)
+24. Write README GCP deployment section
+25. Write README k6 load-testing instructions
+26. Write README "Future Enhancements" section
+
 ## How to proceed
-1. First, propose the package/file layout and core structs/interfaces at a high level, and confirm with me before we start building anything.
-2. Pick a build order (roughly: config → backend registry/`BackendProvider` (static) → proxy core → routing algorithms → health checks → metrics → graceful shutdown → GCP `BackendProvider`/connector → docker-compose demo → README) and tackle it one feature at a time. Follow the layering and interfaces defined in `architecture.md`.
-3. For each feature: explain the concept → help me write a failing test → let me implement → review what I did → move to the next small piece. Do not jump ahead to the next feature until the current one works and I understand it.
-4. Ask me before adding anything not listed above, even if it seems like a natural extension.
-5. Docker/compose scaffolding, README writing, and diagrams can be produced more directly since they're not the Go-learning target — but confirm with me before generating them so it's clear we're switching modes from "tutorial" to "scaffolding."
+1. For each issue: explain the concept → help me write a failing test (if applicable) → let me implement → review what I did → move to the next small piece. Do not jump ahead to the next feature until the current one works and I understand it.
+2. Ask me before adding anything not listed above, even if it seems like a natural extension.
